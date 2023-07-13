@@ -9,21 +9,20 @@ const pageStyles = {
   fontFamily: "-apple-system, Roboto, sans-serif, serif",
 }
 
-let itemsHeader=["itemSlNo","sequenceNo","description"]
-
+let itemsHeader=["itemSlNo","sequenceNo","hsn","itemDescription","genericDescription","concatenateDescription","qty","uom","customsQty","customsUom","unitPrice","amount"]
 
 const Items = ({ serverData }) => {
   const {lineItems}=serverData
 
   return (
-    <main style={pageStyles}>
+     <div>
     <TableVirtuoso
-    style={{ height: 900,backgroundColor:"white",border: "black" }}
-     data={lineItems}
+    style={{ height: "70vh",backgroundColor:"white",border: "1.5px solid #e7e7e7",overflow: "auto" }}
+     data={lineItems.Items}
     fixedHeaderContent={() => (
-            <TableRow style={{"backgroundColor":"gray"}}>
+            <TableRow style={{"backgroundColor":"darkblue"}}>
             {itemsHeader.map((headerItem)=>{
-              return(<TableCell key={headerItem}>{headerItem}</TableCell>)
+              return(<TableCell style={{"color":"white"}}key={headerItem}>{headerItem}</TableCell>)
             })}
                 </TableRow>
       )}
@@ -38,20 +37,30 @@ const Items = ({ serverData }) => {
     >
          
     </TableVirtuoso>
-    </main>
+     </div>
   )
 
 }
 
 export default Items
 export async function getServerData() {
-  //let response=await fetch('https://api.allegro.sentinel.unifo.in/IMPORT/invoiceLineItems?marketCode=IN&customsBrokerCode=FLYJAC&invoiceCreationDate=1688362596060&jobId=VSB3VBI7ZAJSGR2EXTERQ&jobType=IMPORT')
-  //1688540157301
+
   console.time("data")
-  let response=await fetch('https://api.allegro.sentinel.unifo.in/IMPORT/invoiceLineItems?marketCode=IN&customsBrokerCode=FLYJAC&invoiceCreationDate=1688540157301&jobId=VSB3VBI7ZAJSGR2EXTERQ&jobType=IMPORT')
+     //1000
+   let response=await fetch('https://api.allegro.sentinel.unifo.in/IMPORT/invoiceLineItems?marketCode=IN&customsBrokerCode=FLYJAC&invoiceCreationDate=1689238353840&jobId=PQJBLU_8LZ_QYPNGCEVN4&jobType=IMPORT')
+  //2000
+   //let response=await fetch('https://api.allegro.sentinel.unifo.in/IMPORT/invoiceLineItems?marketCode=IN&customsBrokerCode=FLYJAC&invoiceCreationDate=1689238634293&jobId=PQJBLU_8LZ_QYPNGCEVN4&jobType=IMPORT')
+  //3000
+   //let response=await fetch('https://api.allegro.sentinel.unifo.in/IMPORT/invoiceLineItems?marketCode=IN&customsBrokerCode=FLYJAC&invoiceCreationDate=1689239053298&jobId=PQJBLU_8LZ_QYPNGCEVN4&jobType=IMPORT')
+  //4000
+  //let response=await fetch('https://api.allegro.sentinel.unifo.in/IMPORT/invoiceLineItems?marketCode=IN&customsBrokerCode=FLYJAC&invoiceCreationDate=1689239499301&jobId=PQJBLU_8LZ_QYPNGCEVN4&jobType=IMPORT')
+  //5000
+   //let response=await fetch('https://api.allegro.sentinel.unifo.in/IMPORT/invoiceLineItems?marketCode=IN&customsBrokerCode=FLYJAC&invoiceCreationDate=1689244046853&jobId=PQJBLU_8LZ_QYPNGCEVN4&jobType=IMPORT')
+  //6000
+  //let response=await fetch('https://api.allegro.sentinel.unifo.in/IMPORT/invoiceLineItems?marketCode=IN&customsBrokerCode=FLYJAC&invoiceCreationDate=1688122112630&jobId=KMT0UJQUJCFKCWWLYP4OA&jobType=IMPORT')
   let lineItems = await response.json()
   if(lineItems.Items.length){
-    lineItems=lineItems.Items
+    lineItems.Items=lineItems.Items.sort((a,b)=>a.itemSlNo-b.itemSlNo)
   }else{
     lineItems=[]
   }
